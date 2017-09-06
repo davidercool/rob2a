@@ -1,0 +1,14 @@
+var length = 0.5;
+const TimeConst = ??;
+var l = True;
+
+while (l) {
+	if (length == 2.5) {
+		l = False;
+	}
+
+	driveForward(length*TimeConst);
+	driveBackward(length*TimeConst);
+
+	length += 0.5;
+}
