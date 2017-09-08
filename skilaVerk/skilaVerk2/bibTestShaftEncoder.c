@@ -21,6 +21,8 @@
 
 bool l = true;
 float length = 0.5;
+
+/*
 void driveForward(int rot) {
 	while (SensorValue(rightEncoder) < rot) {
 		motor[rightMotor] = 127;
@@ -30,8 +32,47 @@ void driveForward(int rot) {
 
 void driveBackward(int rot) {
 	while (SensorValue(leftEncoder) < rot) {
-		motor[rightMotor] = -75;
-		motor[leftMotor]  = -122;
+		motor[rightMotor] = -65;
+		motor[leftMotor]  = -115;
+	}
+}
+*/
+
+void driveForward(int rot) {
+	while (SensorValue(rightEncoder) < rot) {
+		if(SensorValue[rightEncoder] == -SensorValue[leftEncoder]) {
+			motor[rightMotor] = 90;
+			motor[leftMotor]  = 90;
+		}
+		else if(SensorValue[rightEncoder] > -SensorValue[leftEncoder])
+		{
+			motor[rightMotor] = 70;
+			motor[leftMotor]  = 90;
+		}
+		else
+		{
+			motor[rightMotor] = 90;
+			motor[leftMotor]  = 70;
+		}
+	}
+}
+
+void driveBackward(int rot) {
+	while (SensorValue(leftEncoder) < rot) {
+		if(SensorValue[leftEncoder] == -SensorValue[rightEncoder]) {
+			motor[rightMotor] = -90;
+			motor[leftMotor]  = -90;
+		}
+		else if(SensorValue[leftEncoder] > -SensorValue[rightEncoder])
+		{
+			motor[rightMotor] = -70;
+			motor[leftMotor]  = -90;
+		}
+		else
+		{
+			motor[rightMotor] = -90;
+			motor[leftMotor]  = -70;
+		}
 	}
 }
 
@@ -55,9 +96,9 @@ task main() {
 		int rotLength = length*BASEROTATION;
 		driveForward(rotLength);
 		clearSensors();
-		stopMotors(250);
+		stopMotors(500);
 		driveBackward(rotLength);
-		stopMotors(250);
+		stopMotors(500);
 		length = length + 0.5;
 		writeDebugStream("length: %d and length*time: %d", length, length*BASETIME);
 	}
