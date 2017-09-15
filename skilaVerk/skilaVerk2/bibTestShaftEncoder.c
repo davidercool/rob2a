@@ -16,7 +16,8 @@
 |*    [I/O Port]          [Name]              [Type]                [Description]                     *|
 |*    Motor Port 2        rightMotor          VEX 3-wire module     Right side motor                  *|
 |*    Motor Port 9        leftMotor           VEX 3-wire module     Left side motor                   *|
-|*		Sensor Port
+|*		Sensor Port 15      rightEncoder 															Right side encoder								*|
+|*    Sensor Port 17      leftEncoder 															Left side encoder	   							*|
 \*-----------------------------------------------------------------------------------------------4246-*/
 
 bool l = true;
@@ -80,8 +81,7 @@ task main() {
 
 		int rotLength = length*BASEROTATION;
 		driveForward(rotLength);
-		stopMotors(100);
-		clearSensors();
+		stopMotors(100);		clearSensors();
 		driveBackward(rotLength);
 		stopMotors(100);
 		length = length + 0.5;
