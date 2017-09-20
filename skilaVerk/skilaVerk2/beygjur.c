@@ -77,8 +77,8 @@ task main()
 		} else {
 			turnRight();
 		}
-		clearSensors();
-		driveForward(0.5*BASEROTATION);
 		stopMotors(250);
 	}
+	clearSensors();
+	driveForward(0.5*BASEROTATION);
 }
