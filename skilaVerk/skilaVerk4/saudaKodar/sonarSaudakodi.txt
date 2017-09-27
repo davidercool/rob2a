@@ -1,0 +1,8 @@
+while l:
+  if buttonPressed:
+    break
+
+  if sensorSafe():
+    driveForever()
+  else:
+    turnUntilSafe()
