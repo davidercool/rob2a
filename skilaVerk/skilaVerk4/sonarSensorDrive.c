@@ -1,10 +1,10 @@
-#pragma config(Sensor, dgtl10,  sonarSensor,         sensorSONAR_cm)
+#pragma config(Sensor, dgtl10, sonarSensor,         sensorSONAR_cm)
 #pragma config(Sensor, in1,    lightSensor,         sensorReflection)
-#pragma config(Motor,  port2,           rightMotor,    tmotorServoContinuousRotation, openLoop)
-#pragma config(Motor,  port9,           leftMotor,     tmotorServoContinuousRotation, openLoop, reversed)
+#pragma config(Motor,  port2,  rightMotor,          tmotorServoContinuousRotation, openLoop)
+#pragma config(Motor,  port9,  leftMotor,           tmotorServoContinuousRotation, openLoop, reversed)
 #pragma config(Sensor, dgtl5,  rightEncoder,        sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,  leftEncoder,         sensorQuadEncoder)
-
+#include "foll/ultrasonic&light_sensor_foll.c"
 /*----------------------------------------------------------------------------------------------------*\
 |*                                     - Dual Joystick Control -                                      *|
 |*                                      ROBOTC on VEX 2.0 Cortex                                      *|
@@ -22,56 +22,20 @@
 |*    Motor - Port 6          clawMotor            VEX Motor           Claw motor                     *|
 \*----------------------------------------------------------------------------------------------------*/
 
-bool sensorSafe() {
-	if (SensorValue(sonarSensor) > 35  || SensorValue(sonarSensor) == -1) {
-		return true;
-	} else {
-		return false;
-	}
-}
 
-bool tooDark() {
-	if (SensorValue(lightSensor) > 400) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-void turnUntilSafe() {
-	motor[rightMotor] = -64;
-	motor[leftMotor] = -64;
-	wait1Msec(500);
-	motor[rightMotor] = -50;
-	motor[leftMotor] = 50;
-	wait1Msec(300);
-	while (SensorValue(sonarSensor) < 150 || SensorValue(sonarSensor) == -1) {
-		motor[rightMotor] = -70;
-		motor[leftMotor] = 70;
-	}
-}
-
-void driveForever() {
-	if(SensorValue[rightEncoder] == -SensorValue[leftEncoder]) {
-		motor[rightMotor] = 70;
-		motor[leftMotor]  = 70;
-	}
-	else if(SensorValue[rightEncoder] > -SensorValue[leftEncoder]) {
-		motor[rightMotor] = 50;
-		motor[leftMotor]  = 70;
-	}
-	else {
-		motor[rightMotor] = 70;
-		motor[leftMotor]  = 50;
-	}
-}
 
 task main () {
   while(true) {
-  	if (vexRT[Btn7U] == 1 || tooDark()) {
+  	if (tooDark()) {
+  		while (tooDark()) {
+  			motor[rightMotor] = 0;
+				motor[leftMotor]  = 0;
+				wait10Msec(10);
+  		}
+  	}
+  	if (vexRT[Btn7U] == 1) {
   		break;
   	}
-
   	if (sensorSafe()) {
   		driveForever();
   	} else {
