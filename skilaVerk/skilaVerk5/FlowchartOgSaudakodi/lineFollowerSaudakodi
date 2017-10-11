@@ -1,0 +1,9 @@
+## LINEFOLLOWER ##
+
+main () {
+	if (LineUnderYou) {
+		driveOnit();
+	} else {
+		findLine();
+	}
+}
