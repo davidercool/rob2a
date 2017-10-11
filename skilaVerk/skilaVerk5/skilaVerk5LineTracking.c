@@ -8,9 +8,6 @@
 |*                             	    - Triple Sensor Line Tracking -                                   *|
 |*                                      ROBOTC on VEX 2.0 CORTEX                                      *|
 |*                                                                                                    *|
-|*  This program uses 3 VEX Line Follower Sensors to track a black line on a light(er) surface.       *|
-|*  There is a two second pause at the beginning of the program.                                      *|
-|*                                                                                                    *|
 |*                                        ROBOT CONFIGURATION                                         *|
 |*    NOTES:                                                                                          *|
 |*		This Robot Follows A Line...																																		*|
@@ -24,7 +21,6 @@
 |*    Analog - Port 8     lineFollowerLEFT    VEX Light Sensor      Front-left, facing down           *|
 \*-----------------------------------------------------------------------------------------------4246-*/
 
-/* MAIN */
 task main() {
   wait1Msec(2000);
 
