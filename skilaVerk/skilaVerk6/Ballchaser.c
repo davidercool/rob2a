@@ -1,5 +1,5 @@
-#pragma config(Sensor, in6,    lineFollowerRIGHT,   sensorLineFollower)
-#pragma config(Sensor, in7,    lineFollowerCENTER,  sensorLineFollower)
+#pragma config(Sensor, in7,    lineFollowerRIGHT,   sensorLineFollower)
+#pragma config(Sensor, in6,    lineFollowerCENTER,  sensorLineFollower)
 #pragma config(Sensor, in8,    lineFollowerLEFT,    sensorLineFollower)
 #pragma config(Motor,  port2,           rightMotor,    tmotorNormal, openLoop)
 #pragma config(Motor,  port9,           leftMotor,     tmotorNormal, openLoop, reversed)
@@ -25,11 +25,11 @@
 |*    Analog - Port 7     lineFollowerCENTER  VEX Light Sensor      Front-center, facing down         *|
 |*    Analog - Port 8     lineFollowerLEFT    VEX Light Sensor      Front-left, facing down           *|
 |*    Digital - Port 10   sonarSensor         VEX Sonar Sensor      Front-left, facing forward        *|
-|*    Motor - Port 6          clawMotor            VEX Motor           Claw motor                     *|
-|*    Motor - Port 7					armMotor						 VEX motor					 Arm motor											*|
+|*    Motor - Port 6      clawMotor           VEX Motor             Claw motor                        *|
+|*    Motor - Port 7			armMotor						VEX motor				    	Arm motor									    		*|
 \*----------------------------------------------------------------------------------------------------*/
-bool ballPhace = true;
-int threshold = 2480;
+bool ballphase = true;
+int threshold = 2100;
 
 bool sensorTriggered = false;
 
@@ -40,17 +40,25 @@ void stopMotors() {
 
 void FollowLine() {
 	if (SensorValue(lineFollowerCENTER) > threshold) {
-    motor[leftMotor]  = 64;
-    motor[rightMotor] = 64;
+    motor[leftMotor]  = 42;
+    motor[rightMotor] = 42;
   }
   else if (SensorValue(lineFollowerRIGHT) > threshold) {
-    motor[leftMotor]  = 64;
-    motor[rightMotor] = -32;
+    motor[leftMotor]  = 42;
+    motor[rightMotor] = -42;
   }
   else if (SensorValue(lineFollowerLEFT) > threshold) {
-    motor[leftMotor]  = -32;
-    motor[rightMotor] = 64;
+    motor[leftMotor]  = -42;
+    motor[rightMotor] = 42;
   }
+}
+
+bool isLine() {
+	if (SensorValue(lineFollowerCENTER) < threshold ||
+		SensorValue(lineFollowerRIGHT) < threshold || SensorValue(lineFollowerLEFT) < threshold) {
+		return true;
+	}
+	return false;
 }
 
 /*
@@ -77,62 +85,98 @@ void clawBite() {
 void clawControl(const string s) {
 	if (s == "open") {
 		motor[clawMotor] = 125;
-		wait1Msec(250);
+		wait1Msec(350);
 		motor[clawMotor] = 0;
 	} else if (s == "close") {
 		motor[clawMotor] = -125;
-		wait1Msec(250);
+		wait1Msec(350);
 		motor[clawMotor] = 0;
 	}
 }
 
-void turnAround() {
-	motor[rightMotor] = 125;
-	motor[leftMotor] = -125;
-	wait1Msec(100);
-	stopMotors();
-}
-
 void driveForwardMs(int x) {
-	motor[rightMotor] = 125;
-	motor[leftMotor] = 125;
+	motor[rightMotor] = 40;
+	motor[leftMotor] = 40;
 	wait1Msec(x);
 	stopMotors();
 }
 
+void driveBackwardMs(int x) {
+	motor[rightMotor] = -125;
+	motor[leftMotor] = -125;
+	wait1Msec(x);
+	stopMotors();
+}
+
+void turnAround() {
+	driveBackwardMs(200);
+	motor[rightMotor] = 125;
+	motor[leftMotor] = -125;
+	wait1Msec(1050);
+	stopMotors();
+}
+
+void liftBall() {
+	motor[armMotor] = 63;
+	wait1Msec(600);
+	motor[armMotor] = 0;
+}
 
 void getBall() {
 	stopMotors();
-	clawControl("open");
-	driveForwardMs(200);
+	driveForwardMs(100);
 	clawControl("close");
+	liftBall();
 	turnAround();
 }
 
 void dropInBasket() {
 	stopMotors();
-	driveForwardMs(200);
+	driveForwardMs(400);
 	clawControl("open");
 }
 
+bool sonarvalue() {
+	if (SensorValue[sonarSensor] < 20) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/*
 task main()
 {
+	clawControl("open");
 	while (true) {
-		if (sensorTriggered && ballPhace) {
+		if (sonarvalue() && ballphase) {
 			getBall();
-		} else if (sensorTriggered && !ballPhace) {
+			ballphase = false;
+		} else if (sonarvalue() && !ballphase) {
 			dropInBasket();
-			break;
 		} else {
 			FollowLine();
 		}
 	}
 }
+*/
 
-task Sensor() {
-	if (SensorValue[sonarSensor] < 30) {
-		sensorTriggered = true;
-	} else {
-		sensorTriggered = false;
+task main() {
+	while (true) {
+		if (vexRT[Btn7L] == 1) {break;}
+	}
+	int c = 0;
+	clawControl("open");
+	while (c != 2) {
+		if (!sonarvalue()) {
+			FollowLine();
+		} else {
+			if (c == 1) {
+				dropInBasket();
+			} else {
+				getBall();
+			}
+			c++;
+		}
 	}
 }
