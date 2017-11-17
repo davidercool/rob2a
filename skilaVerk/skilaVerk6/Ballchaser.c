@@ -28,10 +28,7 @@
 |*    Motor - Port 6      clawMotor           VEX Motor             Claw motor                        *|
 |*    Motor - Port 7			armMotor						VEX motor				    	Arm motor									    		*|
 \*----------------------------------------------------------------------------------------------------*/
-bool ballphase = true;
 int threshold = 2100;
-
-bool sensorTriggered = false;
 
 void stopMotors() {
 	motor[leftMotor] = 0;
@@ -60,27 +57,6 @@ bool isLine() {
 	}
 	return false;
 }
-
-/*
-void clawBite() {
-	if (objectFound && phase == 0) {
-		stopMotors();
-		motor[clawMotor] = 63;
-		wait1Msec(500);
-		motor[clawMotor] = -0;
-	} else if (objectFound && phase > 0) {
-		emergencyStop();
-		motor[armMotor] = 63;
-		wait1Msec(500);
-		motor[armMotor] = 0;
-		motor[clawMotor] = 63;
-		wait1Msec(300);
-	}
-	motor[clawMotor] = -63;
-	wait1Msec(500);
-	motor[clawMotor] = -0;
-}
-*/
 
 void clawControl(const string s) {
 	if (s == "open") {
@@ -143,23 +119,6 @@ bool sonarvalue() {
 		return false;
 	}
 }
-
-/*
-task main()
-{
-	clawControl("open");
-	while (true) {
-		if (sonarvalue() && ballphase) {
-			getBall();
-			ballphase = false;
-		} else if (sonarvalue() && !ballphase) {
-			dropInBasket();
-		} else {
-			FollowLine();
-		}
-	}
-}
-*/
 
 task main() {
 	while (true) {
