@@ -1,0 +1,13 @@
+int phase = 0
+openclaw
+while phase != 2 {
+  if !sonartriggered {
+    followline
+  } else {
+    if phase == 1 {
+      getball
+    } else {
+      dropball
+    }
+  }
+}
