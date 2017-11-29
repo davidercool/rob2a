@@ -8,7 +8,7 @@
 
 /*----------------------------------------------------------------------------------------------------*\
 |*                                     - Dual Joystick Control -                                      *|
-|*                                      ROBOTC on VEX 2.0 Cortex                                      *|
+|*                                      ROBOTC on VEX 2.0 Cortex                              	        *|
 |*                                                                                                    *|
 |*  This program allows the robot to be controlled by a controller. The claw is controlled with 4     *|
 |*  buttons and the motors are controlled by the right joystick.                                      *|

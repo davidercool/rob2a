@@ -1,2 +1,0 @@
-#define BASETIME 2247
-#define BASEROTATION 1050
