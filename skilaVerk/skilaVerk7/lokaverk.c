@@ -25,11 +25,13 @@
 |*                                                                                                    *|
 |*                                                                                                    *|
 |*    Notes:                                                                                          *|
+|*    verkefni 1: controller takki 8R                                                                 *|
 |*    verkefni 2: suicide takki 8D                                                                    *|
-|*    verkefni 3: controller takki 8L                                                                 *|
+|*    verkefni 3: verkefni 2.2 left right 8L                                                          *|
 |*    verkefni 4: navigation og light sensetivity takki 7R                                            *|
 |*    verkefni 5: line follower takki 7D                                                              *|
 |*    verkefni 6: put ball into basket ft. line follower takki 7L                                     *|
+|*                                                                                                    *|
 |*    MOTORS & SENSORS:                                                                               *|
 |*    [I/O Port]          [Name]              [Type]                [Description]                     *|
 |*    Motor  - Port 2     rightMotor          VEX 3-wire module     Right side motor                  *|
@@ -75,9 +77,7 @@ task verk5() {
 	/* main loop */
   while(true) {
   	if (vexRT[Btn8U] == 1) {break;}
-  	if (SensorValue(lineFollowerCENTER) > THRESHOLD) {
       FollowLine();
-    }
   }
 }
 
@@ -104,8 +104,8 @@ task verk4() {
 task verk3() {
 	/* main loop */
 	for (int i = 0; i < 3; i++) {
-  	if (vexRT[Btn8U] == 1) {break;}
 		clearEncoders();
+			if (vexRT[Btn8U] == 1) {break;}
 		driveForward(0.5*BASEROTATION);
 		if (vexRT[Btn8U] == 1) {break;}
 		clearEncoders();
@@ -117,16 +117,13 @@ task verk3() {
 		if (vexRT[Btn8U] == 1) {break;}
 		stopMotors(250);
 	}
-	if (vexRT[Btn8U] == 1) {return;}
-	clearEncoders();
-	driveForward(0.5*BASEROTATION);
+	stopMotors(100);
 }
 
 task verk2() {
 	/* main loop */
 	while (true) {
 		if (vexRT[Btn8U] == 1) {break;}
-		length = 0.5;
 		if (length == 2.5) {
 			break;
 		}
@@ -141,7 +138,7 @@ task verk2() {
 task verk1() {
 	while(true)
   {
-  	if (vexRT[Btn7U] == 1) {
+  	if (vexRT[Btn8U] == 1) {
   		break;
   	}
   	enableControls();
